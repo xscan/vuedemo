@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue demo 模板语法</title>
+		<script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+</head>
+<body>
+
+
+<h1>事件绑定，v-bind数据绑定 不同写法</h1>
+<div id="myapp-1">
+<!-- <a v-bind:href="url">12321</a> -->
+<a v-bind:href="url">{{ url }}</a>
+<br>
+<a href="{{ url }}">{{ url }}</a>
+<br>
+<a v-once :href="url">{{url}}</a>
+<br>
+<button @click="updateurl">修改</button>
+</div>
+
+<h1>原始html</h1>
+<div id="app-8">
+
+<p>渲染后:<span v-html="rawHtml"></span></p>
+<p>未渲染:{{ rawHtml }}</p>
+</div>
+
+<h1>Javascript表达式</h1>
+<div id="app9">
+<p>{{ ok ? "YES":"no"}}</p>
+</div>
+</body>
+<script>
+
+var myapp1 = new Vue({
+  el: '#myapp-1',
+  data: {
+   	url:'http://www.baidu.com'
+  },
+  methods:{
+  	updateurl:function(){
+  		this.url='http://www.baisha.com'
+  		// alert(this.url)
+  	}
+  }
+})
+var app8 = new Vue({
+  el: '#app-8',
+  data: {
+    rawHtml:'<span>原始html</span>'
+  }
+})
+var app9 = new Vue({
+  el: '#app9',
+  data: {
+    ok:true
+  }
+})
+</script>
+</html>

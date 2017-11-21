@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sqlite</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body onload="init()">
+    <!-- 创建数据库对象、使用事务进行数据库操作 -->
+    <form id="DataTable">
+    类型：<input type="text" id="type" name="type"/>
+    题目：<input type="text" id="title" name="title" />
+    正确答案：<input type="text" id="answer" name="answer" />
+    <br>
+    选项1：<input type="text" id="item1" name="item1" />
+    选项2：<input type="text" id="item2" name="item2" />
+    选项3：<input type="text" id="item3" name="item3" />
+    选项4：<input type="text" id="item4" name="item4" />
+    <br>
+    答案解析：<input type="text" id="answerparsing" name="answerparsing" />
+    关键词索引：<input type="text" id="keywords" name="keywords" />
+    </form>
+    <hr>
+    <input type="button" value="设置测试值" onclick="setdefault()" />
+    
+      <input type="button" value="select" onclick="selectData()" />
+    <input type="button" value="添加" onclick="addData()" />
+    <input type="button" value="删除" onclick="delData()" />
+    <input type="button" value="更新" onclick="updataData()" />
+    <input type="button" onclick="showAllData()" value="显示全部">
+    <input type="button" onclick="deleteData()" value="清空全部">
+    <hr/>
+    <div id="result"></div>
+    <hr>
+    <hr/>
+    <table id="datatableprint" border="1">
+
+    </table>
+    <p id="'msg"></p>
+
+</body>
+<script type="text/javascript">
+    $.fn.serializeObject = function() {  
+        var o = {};  
+        var a = this.serializeArray();  
+        $.each(a, function() {  
+            if (o[this.name]) {  
+                if (!o[this.name].push) {  
+                    o[this.name] = [ o[this.name] ];  
+                }  
+                o[this.name].push(this.value || '');  
+            } else {  
+                o[this.name] = this.value || '';  
+            }  
+        });  
+        return o;  
+    }
+
+// var INndexedDB={
+//     db:'',
+//     request:'',
+//     currentTableName:'linux',
+//     current:'',
+//     currentIndexkey:'title',
+//     init:function(){
+//         if(!window.indexedDB)
+//         {
+//             console.log("Your Browser does not support IndexedDB");
+//         }
+//         else
+//         {
+//             this.request = window.indexedDB.open("OnlineTest", 1);
+//             this.request.onerror = function(event){
+//                 console.log("Error opening DB", event);
+//             }
+//             this.request.onupgradeneeded   = function(event){
+//                 console.log("Upgrading");
+//                 this.db = event.target.result;
+//                 // var objectStore = db.createObjectStore("linux", {keyPath: "id", autoIncrement: true});
+//                  var objectStore = this.db.createObjectStore("linux", {keyPath: "title", autoIncrement: true});
+//             };
+//             this.request.onsuccess  = function(event){
+//                 console.log("Success opening DB");
+//                 this.db = event.target.result;
+//             }
+//         }
+//     },
+//     addData:function(DateTable){
+//         var transaction = this.db.transaction(["linux"],"readwrite");
+//         // transaction.oncomplete = function(event) {
+//         //     console.log("Success :)");
+//         //     $("#result").html("Add : Success");
+//         // };
+//         // transaction.onerror = function(event) {
+//         //     console.log("Error :(");
+//         //     $("#result").html("Add : Error");
+//         // };  
+//         // var objectStore = transaction.objectStore(this.currentTableName);
+        
+//         // objectStore.add(DateTable);
+//     },
+//     deleteData:function(){
+//         console.log("删除当前表"+this.currentTableName+"key为"+this.currentIndexkey)
+//     },
+//     getall:function(){
+//        console.log("查询"+this.currentTableName+"表所有数据")
+
+//     },
+//     selectData:function(){
+//        console.log("查询"+this.currentTableName+"表当前数据"+this.currentIndexkey)
+//     },
+//     updataData:function(){
+//        console.log("修改"+this.currentTableName+"表Key为："+this.currentIndexkey+"的数据")
+//     }   
+
+// }
+
+// function init(){
+//     var db=INndexedDB;
+//     db.currentTableName='linux'
+//     db.currentIndexkey='title'
+//     db.init()
+//     db.selectData()
+//     var DateTable=$('#DataTable').serializeObject();
+//     db.addData(DateTable)
+// }
+
+    var request, db; 
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    function init(){
+        if(!window.indexedDB)
+        {
+            console.log("Your Browser does not support IndexedDB");
+        }
+        else
+        {
+            request = window.indexedDB.open("OnlineTest", 1);
+            request.onerror = function(event){
+                console.log("Error opening DB", event);
+            }
+            request.onupgradeneeded   = function(event){
+                console.log("Upgrading");
+                db = event.target.result;
+                // var objectStore = db.createObjectStore("linux", {keyPath: "id", autoIncrement: true});
+                 var objectStore = db.createObjectStore("linux", {keyPath: "title", autoIncrement: true});
+            };
+            request.onsuccess  = function(event){
+                console.log("Success opening DB");
+                db = event.target.result;
+            }
+        }
+
+    }
+    function setdefault(){
+           setval()
+    }
+    function addData(){
+        console.log(getValueSerializeArray())
+         var DateTable=$('#DataTable').serializeObject();
+
+        // insertData(getValueSerializeArray())
+        // showAllData();
+        // console.log(DateTable)
+       var transaction = db.transaction(["linux"],"readwrite");
+        transaction.oncomplete = function(event) {
+            console.log("Success :)");
+            $("#result").html("Add : Success");
+        };
+        
+        transaction.onerror = function(event) {
+            console.log("Error :(");
+            $("#result").html("Add : Error");
+        };  
+        var objectStore = transaction.objectStore("linux");
+        
+        objectStore.add(DateTable);
+        showAllData();
+    }
+    function delData(){
+            var title=$('#title').val();
+            console.log(title)
+
+            var transaction = db.transaction(["linux"],"readwrite");
+            transaction.oncomplete = function(event) {
+                console.log("Success :)");
+                $("#result").html("del : Success");
+            };
+            
+            transaction.onerror = function(event) {
+                console.log("Error :(");
+                $("#result").html("del : Error");
+            };  
+            var objectStore = transaction.objectStore("linux");
+            
+            objectStore.delete(title);
+             showAllData();
+    }
+    function selectData(){
+        var title=$('#title').val()
+        console.log(title)
+        var transaction = db.transaction(["linux"]);
+        var objectStore = transaction.objectStore("linux");
+        var request = objectStore.get(title);
+        request.onerror = function(event) {
+            console.log('查询错误')
+        };
+        request.onsuccess = function(event) {
+          // 对 request.result 做些操作！
+          // alert("select value" + request.result);
+          if(request.result == null){
+            $("#result").html("is null");
+          }else{
+            $("#result").html(JSON.stringify(request.result));
+          }
+        };
+    }
+    // //设置测试值
+    function setval(){
+        var arrkey=getKeySerializeArray();
+        var values=['0','创建目录命令','mkdir','touch','date','tar','mkdir','mkdir为建立目录','linx,目录']
+        var i=0;
+        $('input[type=text]').each(function(){
+            $(this).val(values[i++])
+        })
+    }
+    // //
+
+    //获取表单的值
+    function getValueSerializeArray(){
+        var DateTable=$('#DataTable').serializeArray();
+        var formatData=new Array();
+        formatData.push(new Date().getTime())
+        for (var i = 0; i <DateTable.length ; i++) {
+            // console.log(DateTable[i].value)
+            formatData.push(DateTable[i].value)
+        }
+        return formatData;
+    }
+    //获取表单的key
+    function getKeySerializeArray(){
+        var DateTable=$('#DataTable').serializeArray();
+        var formatData=new Array();
+
+        // console.log(DateTable)
+        for (var i = 0; i <DateTable.length ; i++) {
+            // console.log(DateTable[i].name)
+            formatData.push(DateTable[i].name)
+        }
+        return formatData;
+    }
+
+    function initTitlePrint(){
+        var th=getKeySerializeArray();
+        var thhtml='<tr>'
+        for (var i = 0; i < th.length; i++) {
+            thhtml=thhtml+'<th>'+th[i]+'</th>'
+        }
+        thhtml=thhtml+"</tr>"
+        // var tr="<tr><th>1123123</th></tr>";
+        
+        $('#datatableprint').append(thhtml);
+    }
+    function initDataPrint(){
+    var titles=getKeySerializeArray()
+    var tabletrhtml=''
+          db.transaction(function(tx){
+                tx.executeSql(sqls.SelectAll,[],function(tx,result){
+                   for(var i = 0 ;i<result.rows.length;i++){
+                        var tmptd=''
+                            for( value in result.rows.item(i)){
+                                tmptd=tmptd+"<td>"+result.rows.item(i)[value]+"</td>"
+                                 // console.log(result.rows.item(i)[value])
+                            }
+                            tabletrhtml=tabletrhtml+"<tr>"+tmptd+"<td><button onclick=deleteDate('"+result.rows.item(i).time+"')>删除</button></td></tr>";
+                        // console.log(result.rows.item(0).title);
+                    }
+                     $('#datatableprint').append(tabletrhtml);
+                },
+                function (tx,err){
+                    alert(err.source +'===='+err.message);
+                })
+        })
+    }
+
+    function showAllData(){//显示所有数据
+         $('#datatableprint').html('');
+        initTitlePrint()
+        var customers = [];
+
+        var objectStore = db.transaction("linux").objectStore("linux");
+        objectStore.openCursor().onsuccess = function(event) {
+          var cursor = event.target.result;
+          if (cursor) {
+            customers.push(cursor.value);
+            // console.log(typeof cursor.value)
+            cursor.continue();
+          }
+          else {
+            // alert("Got all customers: " + customers.length);
+               // console.log(JSON.stringify(customers))
+                 console.log(customers[0].title)
+                    var tabletrhtml=''
+                    for (var i = 0; i < customers.length; i++) {
+                        console.log(customers[i])
+                        var tmptd=''
+                         for( value in customers[i]){
+                            tmptd=tmptd+"<td>"+customers[i][value]+"</td>"
+                        }
+                        tabletrhtml=tabletrhtml+"<tr>"+tmptd+"</tr>";
+                    }
+                     $('#datatableprint').append(tabletrhtml);
+          }
+
+        };
+     
+        // console.log(typeof customers)
+
+        // console.log(JSON.stringify(customers))
+        //  console.log(customers[0].title)
+        //   console.log(customers[0].title)
+        //    console.log(customers[0].title)
+       // customers.forEach(function(item){
+       //      console.log(item.title)
+
+       // })
+
+        // for(key in customers){
+        //     console.log(key+":")
+        // }
+        //  var tabletrhtml=''
+        // for (var i = 0; i < customers.length; i++) {
+        //     console.log(customers[i])
+        //     var tmptd=''
+        //      for( value in customers[i]){
+        //         tmptd=tmptd+"<td>"+customers[i][value]+"</td>"
+        //     }
+        //     tabletrhtml=tabletrhtml+"<tr>"+tmptd+"</tr>";
+        // }
+        //  $('#datatableprint').append(tabletrhtml);
+    }
+
+    // function  deleteDate(time){//删除所有数据
+    //     db.transaction(function(tx){
+    //         tx.executeSql('delete from question_bank where time=?',[time],function(tx,res){
+    //             // alert(res+':删除成功~');
+    //             console.log(res.rowsAffected)
+    //         },function (tx,err){
+    //             alert('删除失败'+err.message);
+    //         })
+    //     })
+    //     showAllData();
+    // }
+</script>
+</html>

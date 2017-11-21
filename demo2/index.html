@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue demo 组件化应用构件</title>
+		<script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+</head>
+<body>
+<h1>组件化应用构件</h1>
+<div id="app-7">
+  <ol>
+    <!--
+      现在我们为每个 todo-item 提供 todo 对象
+      todo 对象是变量，即其内容可以是动态的。
+      我们也需要为每个组件提供一个“key”，晚些时候我们会做个解释。
+    -->
+    <todo-item
+      v-for="item in groceryList"
+      v-bind:todo="item"
+      v-bind:key="item.id">
+    </todo-item>
+  </ol>
+</div>
+
+<div id="app7">
+<my-context></my-context>
+</div>
+
+<div id="app8">
+<my-context-prop v-bind:item="value.name" v-for="value in lists"></my-context-prop>
+</div>
+
+<h1>事件绑定，v-bind数据绑定 不同写法</h1>
+<div id="myapp-1">
+<!-- <a v-bind:href="url">12321</a> -->
+<a v-bind:href="url">{{ url }}</a>
+<br>
+<a href="{{ url }}">{{ url }}</a>
+<br>
+<a v-once :href="url">{{url}}</a>
+<br>
+<button @click="updateurl">修改</button>
+</div>
+</body>
+<script>
+Vue.component('todo-item', {
+  props: ['todo'],
+  template: '<li>{{ todo.text }}</li>'
+})
+var app7 = new Vue({
+  el: '#app-7',
+  data: {
+    groceryList: [
+      { id: 0, text: '蔬菜' },
+      { id: 1, text: '奶酪' },
+      { id: 2, text: '随便其他什么人吃的东西' }
+    ]
+  }
+})
+var myapp1 = new Vue({
+  el: '#myapp-1',
+  data: {
+   	url:'http://www.baidu.com'
+  },
+  methods:{
+  	updateurl:function(){
+  		this.url='http://www.baisha.com'
+  		// alert(this.url)
+  	}
+  }
+})
+
+Vue.component('my-context', {
+  template: '<p>{{ counter }}</p>',
+  // 技术上 data 的确是一个函数了，因此 Vue 不会警告，
+  // 但是我们却给每个组件实例返回了同一个对象的引用
+  data: function () {
+    return { counter: 0 }
+  }
+})
+var app7 = new Vue({
+  el:'#app7'
+})
+
+Vue.component('my-context-prop', {
+  template: '<p>{{ item }}</p>',
+  // 技术上 data 的确是一个函数了，因此 Vue 不会警告，
+  // 但是我们却给每个组件实例返回了同一个对象的引用
+  props: ['item'],
+})
+var app8 = new Vue({
+  el:'#app8',
+  data:{
+    lists:[
+     {name:'name1',age:11},
+     {name:'name2',age:12},
+     {name:'name3',age:13},
+    ]
+   
+  }
+})
+</script>
+</html>

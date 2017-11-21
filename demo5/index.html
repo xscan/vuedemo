@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ch-ZHS">
+<head>
+	<meta charset="UTF-8">
+	<title>vue demo 组件化应用构件</title>
+	<script src="https://cdn.bootcss.com/vue/2.4.4/vue.min.js"></script>
+  <link rel="stylesheet" href="office-ui-fabric-core-9.0.0/css/fabric.min.css">
+  <!-- <link rel="stylesheet" href="css/app.css"> -->
+  <style>
+  *,html,body{
+    margin: 0;
+    padding: 0;
+  }
+  .nav {
+    width:100%;
+    /*height: 200px;*/
+    background: #006f94;
+    color: #f8f8f8;
+    padding-top: 94px;
+  }
+  .nav .title{
+    font-size: 56px;
+    margin-bottom: 32px;
+      padding-left: 24px;
+  }
+  .nav ul{
+    padding-left: 24px;
+    list-style: none;
+  }
+.nav ul li{
+  /*width: 160px;*/
+  display:inline-block;
+      margin-right: 28px;
+}
+.nav ul li a{
+  /*color:rgb(5,99,193);*/
+  text-decoration:none;
+  color:#fff;
+    font-size: 17px;
+  display: block;
+  line-height: 42px;
+
+  /*text-align: center;*/
+}
+.main-context{
+  margin-left: 24px;
+  position: relative;
+}  
+.success{
+  color:green;
+}
+.error{
+  color:red;
+}
+.prompt{
+  position: fixed;
+  bottom: 20px;
+  right: 100px;
+  width: 100px;
+  height: 50px;
+  background: #006f94;
+  line-height: 50px;
+  text-align: center;
+  color:#fff;
+}
+
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="nav">
+    <span class="ms-font-su title">试题测试</span>
+    <ul>
+      <li><a href="www.baidu.com">linux基础知识</a></li>
+      <li><a href="www.baidu.com">linux进阶</a></li>
+      <li><a href="www.baidu.com">python2</a></li>
+      <li><a href="www.baidu.com">python3</a></li>
+      <li><a href="www.baidu.com">php</a></li>
+      <li><a href="www.baidu.com">vb</a></li>
+      <li><a href="www.baidu.com">lisp</a></li>
+     </ul> 
+  </div>
+  <div class="main-context">
+  <div id="Answer-area">
+      <!-- <div v-for="(item,index) in lists">  -->
+ <!--        <p style="padding-top: 18px;" class="ms-fontSize-xl">{{item.title}}</p>
+              <div class="" style="padding: 10px 5px 10px 0px;">
+                <label v-bind:for="item.item1+index" class="ms-fontSize-xl" style="padding-right: 11px;"><input v-bind:id="item.item1+index" type="radio" v-bind:name="index" v-bind:value="item.item1" v-model="selected[index]">A.{{item.item1}}</label>
+                <label v-bind:for="item.item2+index" class="ms-fontSize-xl" style="padding-right: 11px;"><input v-bind:id="item.item2+index" type="radio" v-bind:name="index" v-bind:value="item.item2" v-model="selected[index]">B.{{item.item2}}</label>
+                <label v-bind:for="item.item3+index" class="ms-fontSize-xl" style="padding-right: 11px;"><input v-bind:id="item.item3+index" type="radio" v-bind:name="index" v-bind:value="item.item3" v-model="selected[index]">C.{{item.item3}}</label>
+                <label v-bind:for="item.item4+index" class="ms-fontSize-xl" style="padding-right: 11px;"><input v-bind:id="item.item4+index" type="radio" v-bind:name="index" v-bind:value="item.item4" v-model="selected[index]">D.{{item.item4}}</label>
+                <p class="ms-fontSize-l">答案解析：{{item.answerparsing}}</p><p>{{selected}}</p>
+              </div> -->
+          <my-context-prop v-for="value in lists" v-bind:item="value"></my-context-prop>
+      <!-- </div> -->
+    </div>
+  <hr>
+
+
+<!--    <div>
+      <p style="padding-top: 18px;" class="ms-fontSize-xl">1.创建文件命令为</p>
+      <div class="" style="padding: 10px 5px 10px 0px;">
+        <label for="touch" class="ms-fontSize-xl" style="padding-right: 11px;"><input id="touch" type="radio" name="da" value="touch">A.touch</label>
+        <label for="mkdir" class="ms-fontSize-xl" style="padding-right: 11px;"><input type="radio" name="da" value="mkdir" id="mkdir">B.mkdir</label>
+        <label for="cd" class="ms-fontSize-xl" style="padding-right: 11px;"><input type="radio" name="da" value="cd" id="cd">C.cd</label>
+        <label for="make" class="ms-fontSize-xl" style="padding-right: 11px;"><input type="radio" name="da" value="make" id="make">D.make</label>
+        </div>
+      <p class="ms-fontSize-l">答案解析：</p>
+    </div>
+   <div>
+      <p style="padding-top: 18px;" class="ms-fontSize-xl">1.创建文件命令为</p>
+      <div class="" style="padding: 10px 5px 10px 0px;">
+        <label for="itouch" class="ms-fontSize-xl" style="padding-right: 11px;"><input  type="radio" name="2" value="touch" id="itouch">A.touch</label>
+        <label for="imkdir" class="ms-fontSize-xl" style="padding-right: 11px;"><input type="radio" name="2" value="mkdir" id="imkdir">B.mkdir</label>
+        <label for="icd" class="ms-fontSize-xl" style="padding-right: 11px;"><input type="radio" name="2" value="cd" id="icd">C.cd</label>
+        <label for="imake" class="ms-fontSize-xl" style="padding-right: 11px;"><input type="radio" name="2" value="make" id="imake">D.make</label>
+        </div>
+      <p class="ms-fontSize-l">答案解析：</p>
+    </div> -->
+    
+  </div>
+
+
+
+</div>
+
+<div class="prompt ms-fontSize-l">60分</div>
+</body>
+<script>
+
+
+Vue.component('my-context-prop', {
+  template: '<div><p style="padding-top: 18px;" class="ms-fontSize-xl">{{item.id}}.{{item.title}}</p>\
+               <div class="" style="padding: 10px 5px 10px 0px;">\
+                <label v-bind:for="item.item1+item.time" class="ms-fontSize-xl" style="padding-right: 11px;">\
+                <input v-bind:id="item.item1+item.time" type="radio" v-bind:name="item.time" v-model="selected" v-on:change="incrementCounter" v-bind:value="item.item1">\
+                A.{{item.item1}}</label>\
+                <label v-bind:for="item.item2+item.time" class="ms-fontSize-xl" style="padding-right: 11px;">\
+                <input v-bind:id="item.item2+item.time" type="radio" v-bind:name="item.time" v-model="selected" v-on:change="incrementCounter" v-bind:value="item.item2">\
+                B.{{item.item2}}</label>\
+                <label v-bind:for="item.item3+item.time" class="ms-fontSize-xl" style="padding-right: 11px;">\
+                <input v-bind:id="item.item3+item.time" type="radio" v-bind:name="item.time" v-model="selected" v-on:change="incrementCounter" v-bind:value="item.item3">\
+                C.{{item.item3}}</label>\
+                <label v-bind:for="item.item4+item.time" class="ms-fontSize-xl" style="padding-right: 11px;">\
+                <input v-bind:id="item.item4+item.time" type="radio" v-bind:name="item.time" v-model="selected" v-on:change="incrementCounter" v-bind:value="item.item4">\
+                D.{{item.item4}}</label>\
+                <p class="ms-fontSize-l">答案解析：{{item.answerparsing}}</p><p>{{issuccess}}</p></div>\
+                ',
+                 // <p>{{selected}}</p><p>{{counter}}</p><p>{{issuccess}}</p>\
+  props: ['item'],
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  data: function () {
+    return { counter: this.item,selected:'',issuccess:false,successstyle:'success',errorstyle:'error'}
+  },
+  methods: {
+    incrementCounter: function () {
+        this.issuccess=''
+        if(this.counter.answer==this.selected){
+          this.issuccess=true
+        }else{
+          this.issuccess=false
+        }
+    }
+  },
+})
+var i=1;
+var app8 = new Vue({
+  el:'#Answer-area',
+  data:{
+    lists:[
+     {id:1,time:1508316462666, type:'0', title:'创建目录命令', answer:'mkdir', item1:'cd', item2:'touch', item3:'mkdir', item4:'tar', answerparsing:'touch为创建文件，cd为切换目录，tar 压缩解压文件,mkdir创建目录', keywords:'linux,目录,创建'},
+    {id:2,time:1508316462668, type:'0', title:'创建目录命令', answer:'mkdir', item1:'cd', item2:'touch', item3:'mkdir', item4:'tar', answerparsing:'touch为创建文件，cd为切换目录，tar 压缩解压文件,mkdir创建目录', keywords:'linux,目录,创建'}, 
+       {id:3,time:1508316462669, type:'0', title:'切换目录命令', answer:'cd', item1:'cd', item2:'touch', item3:'mkdir', item4:'tar', answerparsing:'touch为创建文件，cd为切换目录，tar 压缩解压文件,mkdir创建目录', keywords:'linux,目录,创建'}, 
+    ]
+  },
+})
+</script>
+</html>
